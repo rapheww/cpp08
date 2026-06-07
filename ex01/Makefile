@@ -1,7 +1,7 @@
 NAME        = span
 
 CXX         = c++   
-CXXFLAGS    = -Wall -Werror -Wextra -std=c++98 -MMD
+CXXFLAGS    = -Wall -Werror -Wextra -std=c++98 -MMD -g3
 
 SRC         = main.cpp \
 			Span.cpp
