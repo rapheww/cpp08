@@ -6,7 +6,7 @@
 /*   By: rchaumei <rchaumei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/06 20:25:40 by rchaumei          #+#    #+#             */
-/*   Updated: 2026/06/07 23:00:39 by rchaumei         ###   ########.fr       */
+/*   Updated: 2026/06/08 20:47:49 by rchaumei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,37 @@ const char* Span::IsFull::what() const throw(){
     return "Span is full, no more storage";
 }
 
+const char* Span::EnoughSpace::what() const throw(){
+    return "Span can't store this amount of numbers";
+}
+
+const char* Span::MissingElement::what() const throw(){
+    return "Span needs more numbers to find a span";
+}
+
 void Span::addNumber(int value){
     if (_intVector.size() >= _N)
         throw(Span::IsFull());
-    _intVector.insert(_intVector.begin() + _intVector.size(), value);
+    _intVector.push_back(value);
 }
 
-// void Span::addNumber(int value){
-//     if (_intVector.size() >= _N)
-//         throw(Span::IsFull());
-//     _intVector.insert(_intVector.begin() + _intVector.size(), value);
-// }
+void Span::addNumber(std::vector<int>::const_iterator start, std::vector<int>::const_iterator end){
+    if (_intVector.size() + std::distance(start, end) > _N)
+        throw(Span::EnoughSpace());
+    _intVector.insert(_intVector.end(), start, end);
+}
 
 int Span::longestSpan(){
+    if (_intVector.size() < 2)
+        throw(Span::MissingElement());
     std::vector<int>::const_iterator itMin = std::min_element(_intVector.begin(), _intVector.end());
     std::vector<int>::const_iterator itMax = std::max_element(_intVector.begin(), _intVector.end());
     return *itMax - *itMin;
 }
 
 int Span::shortestSpan() const{
+    if (_intVector.size() < 2)
+        throw(Span::MissingElement());
     std::vector<int> tmp = _intVector;
     int distance = std::numeric_limits<int>::max();
     std::vector<int>::const_iterator itEnd = tmp.end() - 1;
